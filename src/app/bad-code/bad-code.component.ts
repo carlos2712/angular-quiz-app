@@ -12,15 +12,19 @@ export class BadCodeComponent implements OnInit {
   ngOnInit() {
   }
 
-
-  poorlyWrittenFunction() {
-    let result = 0;
-    for (let i = 0; i < this.questions.length; i++) {
-      if (this.answers[i] === this.questions[i].correctAnswer) {
-        result++;
-      }
+  calculateSum(a, b) {
+    let sum = 0;
+    for (let i = 0; i < arguments.length; i++) {
+      sum += arguments[i];
     }
-    return "Your score is " + result + " out of " + this.questions.length;
+    return sum;
+  }
+
+  calculateMultipleSums() {
+    let result1 = this.calculateSum(1, 2);
+    let result2 = this.calculateSum(3, 4);
+    let result3 = this.calculateSum(5, 6);
+    console.log(result1, result2, result3);
   }
 
 }
