@@ -1,0 +1,38 @@
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Knowledge Quiz</h1>
+  
+    <div *ngIf="!isQuizComplete">
+      <div *ngIf="currentStep < questions.length">
+        <h3>{{ questions[currentStep].question }}</h3>
+  
+        <!-- Display the code example if available -->
+        <div *ngIf="questions[currentStep].codeExample" class="code-example">
+          <pre><code>{{ questions[currentStep].codeExample }}</code></pre>
+        </div>
+  
+        <div class="form-group">
+          <div *ngFor="let option of questions[currentStep].options; let i = index">
+            <input 
+              type="radio" 
+              [name]="'question' + currentStep" 
+              [value]="i" 
+              [(ngModel)]="selectedAnswer"
+              class="form-check-input" />
+            <label class="form-check-label">{{ option }}</label>
+          </div>
+        </div>
+  
+        <button 
+          class="btn btn-primary" 
+          [disabled]="selectedAnswer === null"
+          (click)="nextQuestion()">Next</button>
+      </div>
+    </div>
+  
+    <div *ngIf="isQuizComplete">
+      <h3 class="text-center">Quiz Completed!</h3>
+      <p class="text-center">{{ getResult() }}</p>
+      <button class="btn btn-secondary" (click)="restartQuiz()">Restart Quiz</button>
+    </div>
+  </div>
+  
