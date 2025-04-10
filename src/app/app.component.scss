@@ -1,0 +1,17 @@
+.content {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  app-quiz, app-graph {
+    flex: 1;
+    min-width: 0; // Prevents flex items from overflowing
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
