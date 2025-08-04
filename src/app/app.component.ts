@@ -3,12 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { QuizComponent } from './quiz/quiz.component';
-import { GraphComponent } from './graph/graph.component';
 import { LotteryComponent } from './lottery/lottery.component';
 import { SimpleHeaderComponent } from './feature-flags/simple-header/simple-header.component';
 import { BetaFeaturesComponent } from './feature-flags/beta-features/beta-features.component';
 import { BadFlagsComponent } from './feature-flags/bad-flags/bad-flags.component';
 import { TrunkBasedComponent } from './feature-flags/trunk-based/trunk-based.component';
+import { RedesignComponent } from './feature-flags/redesign/redesign.component';
 
 @Component({
   selector: 'app-root',
@@ -18,12 +18,12 @@ import { TrunkBasedComponent } from './feature-flags/trunk-based/trunk-based.com
     FormsModule, 
     CommonModule,
     QuizComponent, 
-    GraphComponent,
     LotteryComponent,
     SimpleHeaderComponent,
     BetaFeaturesComponent,
     BadFlagsComponent,
-    TrunkBasedComponent
+    TrunkBasedComponent,
+    RedesignComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

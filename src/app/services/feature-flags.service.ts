@@ -105,6 +105,7 @@ export type FeatureFlags = {
   newUserFlow: FeatureConfig;        // New user onboarding flow being developed in trunk
   enhancedSearch: FeatureConfig;     // Search enhancement in development
   darkMode: FeatureConfig;           // Dark mode feature with A/B testing
+  modernDashboard: FeatureConfig;    // Modern dashboard redesign
 } & {
   // Legacy features for comparison
   [key: string]: FeatureConfig | boolean;
@@ -230,6 +231,30 @@ export class FeatureFlagsService {
         exposures: 0,
         interactions: 0,
         errors: 0
+      }
+    },
+    modernDashboard: {
+      enabled: true,
+      version: '1.0.0',
+      versionInfo: {
+        major: 1,
+        minor: 0,
+        patch: 0,
+        status: 'beta',
+        releaseDate: new Date('2025-08-01')
+      },
+      strategy: RolloutStrategy.Gradual,
+      rolloutPercentage: 50,
+      environments: [Environment.Development, Environment.Staging],
+      dependencies: [],
+      metrics: {
+        exposures: 0,
+        interactions: 0,
+        errors: 0,
+        performance: {
+          avgResponseTime: 0,
+          errorRate: 0
+        }
       }
     },
     ...{
