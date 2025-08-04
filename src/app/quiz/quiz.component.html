@@ -1,5 +1,9 @@
 <div class="container mt-5">
     <h1 class="text-center mb-4">Knowledge Quiz</h1>
+    
+    <div class="score-tracker mb-3">
+      Current Score: {{ correctCount }} / {{ currentStep }}
+    </div>
   
     <div *ngIf="!isQuizComplete">
       <div *ngIf="currentStep < questions.length">
@@ -35,4 +39,3 @@
       <button class="btn btn-secondary" (click)="restartQuiz()">Restart Quiz</button>
     </div>
   </div>
-  

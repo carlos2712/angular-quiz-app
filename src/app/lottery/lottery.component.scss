@@ -1,0 +1,316 @@
+.lottery-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h1 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+  }
+}
+
+.shuffle-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-bottom: 2rem;
+
+  &:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #8e44ad, #9b59b6);
+  }
+}
+
+.grid-container {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.squares-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.square {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  &.ux-card {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+  }
+
+  &.dev-card {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+  }
+
+  &.ba-card {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+  }
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+    transform: none !important;
+
+    &:hover {
+      transform: none !important;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+  }
+
+  .checkmark {
+    color: white;
+    font-size: 2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .square-number {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.category-counts {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.count-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  color: white;
+  font-weight: 500;
+
+  &.ux {
+    background-color: #3498db;
+  }
+
+  &.dev {
+    background-color: #2ecc71;
+  }
+
+  &.ba {
+    background-color: #e74c3c;
+  }
+}
+
+.game-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.lottery-button {
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  background-color: #9b59b6;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+    background-color: #8e44ad;
+  }
+
+  &:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.card-container {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 3/2;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+
+  &.flipped {
+    transform: rotateY(180deg);
+  }
+
+  &.ux-card {
+    .card-front {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+    }
+  }
+
+  &.dev-card {
+    .card-front {
+      background: linear-gradient(135deg, #2ecc71, #27ae60);
+    }
+  }
+
+  &.ba-card {
+    .card-front {
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+    }
+  }
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: white;
+}
+
+.card-front {
+  transform: rotateY(0deg);
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  background: #34495e;
+  position: absolute;
+  top: 0;
+}
+
+.type-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.2);
+  font-weight: 500;
+}
+
+.question-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.question,
+.answer {
+  font-size: 1.2rem;
+  text-align: center;
+  margin: 0;
+}
+
+.instruction {
+  font-size: 0.9rem;
+  text-align: center;
+  opacity: 0.8;
+  margin-top: 1rem;
+}
+
+.question-image {
+  max-width: 200px;
+  max-height: 150px;
+  border-radius: 8px;
+}
+
+.close-button {
+  display: block;
+  margin: 2rem auto;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  background: #95a5a6;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+    background: #7f8c8d;
+  }
+}
+
+.fade-enter {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 300ms, transform 300ms;
+}

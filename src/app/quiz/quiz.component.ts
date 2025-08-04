@@ -309,47 +309,32 @@ export class QuizComponent {
     }
   ];
 
-  currentStep: number = 0;
+  correctCount = 0;
   selectedAnswer: number | null = null;
-  answers: number[] = [];
-  isQuizComplete: boolean = false;
-
-  constructor() {
-    this.shuffleQuestions();
-  }
-
-  shuffleQuestions() {
-    this.questions = this.questions
-      .map(question => ({ question, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
-      .map(({ question }) => question)
-      .slice(0, 5);
-  }
+  currentStep = 0;
+  isQuizComplete = false;
 
   nextQuestion() {
-    if (this.selectedAnswer !== null) {
-      this.answers.push(this.selectedAnswer);
-      this.selectedAnswer = null;
-      this.currentStep++;
+    if (this.selectedAnswer === this.questions[this.currentStep].correctAnswer) {
+      this.correctCount++;
     }
-    if (this.currentStep === this.questions.length) {
+    
+    if (this.currentStep < this.questions.length - 1) {
+      this.currentStep++;
+      this.selectedAnswer = null;
+    } else {
       this.isQuizComplete = true;
     }
   }
 
-  prevQuestion() {
-    this.currentStep--;
-  }
-
-  getResult() {
-    const score = this.answers.filter((answer, index) => answer === this.questions[index].correctAnswer).length;
-    return `You scored ${score} out of ${this.questions.length}.`;
+  getResult(): string {
+    return `You got ${this.correctCount} out of ${this.questions.length} questions correct!`;
   }
 
   restartQuiz() {
     this.currentStep = 0;
     this.selectedAnswer = null;
-    this.answers = [];
+    this.correctCount = 0;
     this.isQuizComplete = false;
   }
 }

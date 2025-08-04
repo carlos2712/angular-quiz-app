@@ -1,0 +1,44 @@
+<div class="lottery-container">
+  <div class="header">
+    <h1>Knowledge Lottery</h1>
+    <button class="shuffle-button" (click)="reshuffleQuestions()">Reshuffle Questions</button>
+  </div>
+
+  <div class="game-area" *ngIf="!currentQuestion">
+    <div class="grid-container">
+      <div class="squares-grid">
+        <div class="square" 
+             *ngFor="let question of questions"
+             [ngClass]="[getQuestionTypeClass(question.type), selectedQuestionIds.has(question.id) ? 'disabled' : '']"
+             (click)="selectQuestion(question)">
+          <span class="square-number">{{question.id}}</span>
+          <div class="overlay" *ngIf="selectedQuestionIds.has(question.id)">
+            <span class="checkmark">✓</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="game-area" *ngIf="currentQuestion">
+    <div class="card-container">
+      <div class="card" [class]="getQuestionTypeClass(currentQuestion.type)" [class.flipped]="isAnswerVisible" (click)="toggleAnswer()" [@cardFlip]="isAnswerVisible ? 'flipped' : 'default'">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="type-badge">{{currentQuestion.type}}</div>
+            <div class="question-content">
+              <p class="question">{{currentQuestion.question}}</p>
+              <img *ngIf="currentQuestion.image" [src]="currentQuestion.image" alt="Question visual" class="question-image">
+            </div>
+            <div class="instruction">Click to see answer</div>
+          </div>
+          <div class="card-back">
+            <p class="answer">{{currentQuestion.answer}}</p>
+            <div class="instruction">Click to see question</div>
+          </div>
+        </div>
+      </div>
+      <button class="close-button" (click)="closeQuestion()">Back to Grid</button>
+    </div>
+  </div>
+</div>
