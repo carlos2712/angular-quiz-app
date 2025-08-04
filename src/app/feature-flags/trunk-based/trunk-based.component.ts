@@ -53,25 +53,39 @@ import { FeatureFlagsService, Environment, RolloutStrategy } from '../../service
         <div class="feature-card" [class.enabled]="isFeatureEnabled('darkMode')">
           <h3>Dark Mode</h3>
           <div class="feature-meta">
-            <span class="version">v{{getFeatureVersion('darkMode')}}</span>
+            <span class="version" [class.deprecated]="isFeatureDeprecated('darkMode')">
+              {{getFeatureVersion('darkMode')}}
+            </span>
             <span class="strategy">{{getFeatureStrategy('darkMode')}}</span>
+            <span class="variant">Variant: {{getFeatureVariant('darkMode')}}</span>
           </div>
           <p>Demonstrates A/B testing functionality</p>
           <div class="feature-content" *ngIf="isFeatureEnabled('darkMode')">
             <p>🌙 You are in test group: {{getABTestGroup('darkMode')}}</p>
           </div>
+          <div class="feature-metrics">
+            <h4>Metrics</h4>
+            <p>{{getFeatureMetrics('darkMode')}}</p>
+          </div>
+          <div class="feature-controls">
+            <button (click)="toggleKillswitch('darkMode')" class="control-btn">
+              Toggle Killswitch
+            </button>
+          </div>
         </div>
       </div>
 
       <div class="info-panel">
-        <h3>Trunk-Based Development Practices Demonstrated:</h3>
+        <h3>Advanced Feature Flag Capabilities:</h3>
         <ul>
-          <li>Feature flags enabling continuous deployment to trunk</li>
-          <li>Environment-specific feature availability</li>
-          <li>Gradual rollout capabilities</li>
-          <li>A/B testing infrastructure</li>
-          <li>Version tracking for features</li>
-          <li>Feature dependencies management</li>
+          <li>🎯 User targeting and segmentation</li>
+          <li>📊 Real-time metrics tracking</li>
+          <li>🚨 Emergency killswitch system</li>
+          <li>📅 Scheduled feature activation</li>
+          <li>🔄 Feature variants and A/B testing</li>
+          <li>📈 Performance monitoring</li>
+          <li>🔒 Environment-specific controls</li>
+          <li>⚡ Instant/Gradual deployment options</li>
         </ul>
       </div>
     </div>
@@ -169,20 +183,85 @@ import { FeatureFlagsService, Environment, RolloutStrategy } from '../../service
     .info-panel li {
       margin: 0.5rem 0;
     }
+
+    .feature-metrics {
+      margin-top: 1rem;
+      padding: 0.5rem;
+      background: #f8f9fa;
+      border-radius: 4px;
+      font-size: 0.875rem;
+    }
+
+    .feature-metrics h4 {
+      margin: 0 0 0.5rem 0;
+      color: #495057;
+    }
+
+    .feature-controls {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .control-btn {
+      padding: 0.5rem 1rem;
+      background: #e9ecef;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+    }
+
+    .control-btn:hover {
+      background: #dee2e6;
+    }
+
+    .version.deprecated {
+      background: #ffe3e3;
+      color: #c92a2a;
+    }
+
+    .variant {
+      background: #e3fafc;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      color: #0c8599;
+    }
   `]
 })
 export class TrunkBasedComponent implements OnInit {
   environments = Object.values(Environment);
   currentEnv = Environment.Development;
   featureConfigs: { [key: string]: any } = {};
+  metrics: { [key: string]: any } = {};
 
   constructor(private featureFlagsService: FeatureFlagsService) {
-    // Initialize feature configurations
+    // Initialize feature configurations and start monitoring
     ['newUserFlow', 'enhancedSearch', 'darkMode'].forEach(feature => {
-      this.featureFlagsService.getFeatureConfig(feature as any).subscribe(config => {
-        this.featureConfigs[feature] = config;
-      });
+      this.initializeFeature(feature);
+      this.startMetricsMonitoring(feature);
     });
+  }
+
+  private initializeFeature(feature: string) {
+    this.featureFlagsService.getFeatureConfig(feature as any).subscribe(config => {
+      this.featureConfigs[feature] = config;
+      if (config?.metrics) {
+        this.metrics[feature] = config.metrics;
+      }
+    });
+  }
+
+  private startMetricsMonitoring(feature: string) {
+    // Simulate metrics updates
+    setInterval(() => {
+      const metrics = this.featureFlagsService.getFeatureMetrics(feature as any);
+      if (metrics) {
+        this.metrics[feature] = metrics;
+      }
+    }, 5000);
   }
 
   ngOnInit() {
@@ -192,14 +271,29 @@ export class TrunkBasedComponent implements OnInit {
   switchEnvironment(env: Environment) {
     this.currentEnv = env;
     this.featureFlagsService.setEnvironment(env);
+    // Re-initialize features for new environment
+    Object.keys(this.featureConfigs).forEach(feature => {
+      this.initializeFeature(feature);
+    });
   }
 
   isFeatureEnabled(feature: string) {
-    return this.featureFlagsService.isFeatureEnabled(feature as any);
+    const isEnabled = this.featureFlagsService.isFeatureEnabled(feature as any);
+    if (isEnabled) {
+      // Track feature interaction
+      this.featureFlagsService.trackFeatureInteraction(feature as any, 'view', {
+        environment: this.currentEnv
+      });
+    }
+    return isEnabled;
   }
 
   getFeatureVersion(feature: string): string {
-    return this.featureConfigs[feature]?.version || 'N/A';
+    const config = this.featureConfigs[feature];
+    if (!config?.versionInfo) return 'N/A';
+    
+    const { major, minor, patch, status } = config.versionInfo;
+    return `v${major}.${minor}.${patch} (${status})`;
   }
 
   getFeatureStrategy(feature: string): string {     
@@ -209,5 +303,34 @@ export class TrunkBasedComponent implements OnInit {
 
   getABTestGroup(feature: string): string {
     return this.featureConfigs[feature]?.abTestGroup || 'N/A';
+  }
+
+  getFeatureMetrics(feature: string): string {
+    const metrics = this.metrics[feature];
+    if (!metrics) return 'No metrics available';
+
+    return `Views: ${metrics.exposures} | 
+            Interactions: ${metrics.interactions} | 
+            Errors: ${metrics.errors}`;
+  }
+
+  toggleKillswitch(feature: string) {
+    const config = this.featureConfigs[feature];
+    if (config?.killswitch) {
+      const reason = !config.killswitch.enabled ? 
+        'Emergency deactivation for testing' : 
+        '';
+      
+      this.featureFlagsService.activateKillswitch(feature as any, reason);
+      this.initializeFeature(feature);
+    }
+  }
+
+  isFeatureDeprecated(feature: string): boolean {
+    return this.featureFlagsService.isFeatureDeprecated(feature as any);
+  }
+
+  getFeatureVariant(feature: string): string {
+    return this.featureFlagsService.getFeatureVariant(feature as any) || 'default';
   }
 }
