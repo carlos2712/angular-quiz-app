@@ -9,6 +9,7 @@ import { BetaFeaturesComponent } from './feature-flags/beta-features/beta-featur
 import { BadFlagsComponent } from './feature-flags/bad-flags/bad-flags.component';
 import { TrunkBasedComponent } from './feature-flags/trunk-based/trunk-based.component';
 import { RedesignComponent } from './feature-flags/redesign/redesign.component';
+import { BabyImagesComponent } from './baby-images/baby-images.component';
 
 @Component({
   selector: 'app-root',
@@ -23,12 +24,13 @@ import { RedesignComponent } from './feature-flags/redesign/redesign.component';
     BetaFeaturesComponent,
     BadFlagsComponent,
     TrunkBasedComponent,
-    RedesignComponent
+    RedesignComponent,
+    BabyImagesComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'angular-quiz-app';
-  activeTab: 'quiz' | 'lottery' | 'feature-flags' = 'quiz';
+  activeTab: 'quiz' | 'lottery' | 'feature-flags' | 'baby-images' = 'quiz';
 }

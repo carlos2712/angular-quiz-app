@@ -1,0 +1,67 @@
+<div class="baby-images-container">
+  <header class="header">
+    <h1>Baby Photo Gallery</h1>
+    <div class="navigation-controls">
+      <button class="nav-button" (click)="previousSet()" [disabled]="imageSets.length <= 1">
+        <span class="arrow">←</span> Previous
+      </button>
+      <div class="person-info">
+        <ng-container *ngIf="!isNameVisible">
+          <span class="folder-label">Folder {{currentImageSet.folderNumber}}</span>
+          <button class="reveal-button" (click)="toggleName()">Show Name</button>
+        </ng-container>
+        <ng-container *ngIf="isNameVisible">
+          <span class="person-name">{{currentImageSet.personName}}</span>
+          <button class="reveal-button active" (click)="toggleName()">Hide Name</button>
+        </ng-container>
+      </div>
+      <button class="nav-button" (click)="nextSet()" [disabled]="imageSets.length <= 1">
+        Next <span class="arrow">→</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="images-display">
+    <div class="image-card">
+      <div class="card-header">
+        <h3>Young Photo</h3>
+        <div class="controls">
+          <span class="blur-indicator">{{currentBlurLevel * 10}}% Blurred</span>
+          <button 
+            class="speed-button" 
+            [class.active]="isSpeedUp()"
+            (click)="toggleSpeed()"
+            [disabled]="currentBlurLevel === 0">
+            <span class="speed-icon">⚡</span>
+            {{isSpeedUp() ? 'Normal Speed' : 'Speed Up'}}
+          </button>
+        </div>
+      </div>
+      <div class="image-container">
+        <img 
+          [src]="currentImageSet.young" 
+          [style.filter]="'blur(' + currentBlurLevel + 'px)'"
+          alt="Young photo"
+          class="transition-image">
+      </div>
+    </div>
+
+    <div class="image-card">
+      <div class="card-header">
+        <h3>Recent Photo</h3>
+        <button class="reveal-button" [class.active]="isRecentImageVisible" (click)="toggleRecentImage()">
+          {{isRecentImageVisible ? 'Hide Photo' : 'Reveal Photo'}}
+        </button>
+      </div>
+      <div class="image-container" [class.hidden]="!isRecentImageVisible">
+        <img 
+          [src]="currentImageSet.recent" 
+          alt="Recent photo"
+          class="reference-image">
+      </div>
+      <div class="placeholder" *ngIf="!isRecentImageVisible">
+        <span>Click "Reveal Photo" to view the recent photo</span>
+      </div>
+    </div>
+  </div>
+</div>

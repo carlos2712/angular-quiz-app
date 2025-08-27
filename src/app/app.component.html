@@ -205,11 +205,13 @@
     <button class="tab-button" [class.active]="activeTab === 'quiz'" (click)="activeTab = 'quiz'">Quiz Game</button>
     <button class="tab-button" [class.active]="activeTab === 'lottery'" (click)="activeTab = 'lottery'">Lottery Game</button>
     <button class="tab-button" [class.active]="activeTab === 'feature-flags'" (click)="activeTab = 'feature-flags'">Feature Flags</button>
+    <button class="tab-button" [class.active]="activeTab === 'baby-images'" (click)="activeTab = 'baby-images'">Baby Images</button>
   </div>
   <div class="content">
     <div class="tab-content">
       <app-quiz *ngIf="activeTab === 'quiz'"></app-quiz>
       <app-lottery *ngIf="activeTab === 'lottery'"></app-lottery>
+      <app-baby-images *ngIf="activeTab === 'baby-images'"></app-baby-images>
       
       <div *ngIf="activeTab === 'feature-flags'" class="feature-flags-content">
         <h1>Feature Flags Demo</h1>
